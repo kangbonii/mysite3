@@ -20,7 +20,6 @@ public class BoardVo {
 
 
 	public BoardVo(int no, String title, String content, int hit, Date reg_date, int user_no) {
-		super();
 		this.no = no;
 		this.title = title;
 		this.content = content;

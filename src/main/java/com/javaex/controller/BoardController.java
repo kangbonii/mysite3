@@ -1,6 +1,7 @@
 package com.javaex.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.javaex.interceptor.Auth;
 import com.javaex.service.boardService;
 import com.javaex.vo.BoardVo;
 import com.javaex.vo.UserVo;
@@ -23,16 +25,37 @@ public class BoardController {
 	@Autowired
 	private boardService boardService;
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String addlist(Model model) {
+	
+	/* 리스트 기본 */
+	/*
+	@RequestMapping(value = {"","/list"}, method = RequestMethod.GET)
+	public String addlist(@RequestParam(value="crtPage" , required = false, defaultValue = "1") int crtPage, Model model) {
 		System.out.println("list");
-		List<BoardVo> list = boardService.getList();
-		System.out.println(list.toString());
-		model.addAttribute("list", list);
+		//List<BoardVo> list = boardService.getList(crtPage);
+		Map<String,Object> pMap =  boardService.getList(crtPage);
+		System.out.println(pMap.toString());
+		//model.addAttribute("list", list);
+		model.addAttribute("pMap", pMap);
+		return "board/list";
+		
+	}
+	*/
+	
+	@RequestMapping(value = {"","/list"}, method = RequestMethod.GET)
+	public String addlist(@RequestParam(value="crtPage" , required = false, defaultValue = "1") int crtPage, 
+						  @RequestParam(value="kwd", required=false, defaultValue="") String kwd,  
+						  Model model) {
+		System.out.println("list");
+		
+		Map<String,Object> pMap =  boardService.getList(crtPage,kwd);
+		System.out.println(pMap.toString());
+		
+		model.addAttribute("pMap", pMap);
 		return "board/list";
 		
 	}
 	
+	@Auth
 	@RequestMapping(value = "/writeform", method = RequestMethod.GET)
 	public String writeform() {
 		System.out.println("writeform");
@@ -73,7 +96,10 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
-	public String modify(@ModelAttribute BoardVo boardvo, Model model) {
+	public String modify(@ModelAttribute BoardVo boardvo,
+			@RequestParam(value="crtPage", required=false, defaultValue="1" ) int crtPage, 
+			@RequestParam( value="kwd", required=false, defaultValue="") String kwd,
+			Model model) {
 		System.out.println("modify");
 		
 		boardService.modify(boardvo);
@@ -92,6 +118,15 @@ public class BoardController {
 	}
 	
 	
+	
+	
+	/*
+	@RequestMapping(value = "/insert70", method = RequestMethod.GET)
+	public String ininin() {
+		boardService.insertinsert();
+		return "redirect:/main";
+	}
+	*/
 	
 	
 	

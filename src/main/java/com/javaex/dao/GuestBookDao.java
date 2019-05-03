@@ -1,12 +1,5 @@
 package com.javaex.dao;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -33,6 +26,21 @@ public class GuestBookDao {
 	public int insert(GuestBookVo vo) {
 		return sqlsession.insert("guestbook.insert",vo);
 	}
+	public GuestBookVo selectOne(int no) {
+		return sqlsession.selectOne("guestbook.selectOne", no);
+	}
+	
+	public int insertselectno(GuestBookVo vo) {
+		int count= sqlsession.insert("guestbook.insert",vo);
+		return count;
+		
+	}
+
+	
+	
+	
+	
+
 
 
 //	public List<GuestBookVo> getList(){

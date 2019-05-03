@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rboard">
+	<select id="selectList" parameterType="map" resultType="RboardVo">
+	<![CDATA[
+		select rnum,
+		        no,
+		        title,
+		        hit,
+		        reg_date,
+		        user_no,
+		        name
+		from (select rownum rnum, 
+		                no,
+		                title,
+		                hit,
+		                reg_date,
+		                user_no,
+		                name
+		        from (select b.no,                         
+		                     b.title,
+		                     b.hit,
+		                     b.reg_date,
+		                     b.user_no,
+		                     u.name 
+		                from rboard b, users u
+		                where b.user_no = u.no 
+	]]>
+		<if test="kwd != null and kwd !=''">
+			and title like '%' || #{kwd} || '%'
+		</if>
+	
+	
+	<![CDATA[		            
+		                order by group_no desc,order_no asc)
+		      )
+		where rnum>#{startRnum} and rnum<=#{endRnum}
+	]]>
+	</select>
+
+	<select id="totalCount" parameterType="String" resultType="int">
+	<![CDATA[
+			select count(*)
+			from rboard			      
+	]]>
+
+		<if test="_parameter  != null and _parameter !=''">
+			where title like '%' || #{kwd} || '%'
+		</if>
+
+	</select>
+
+
+	<insert id="insert" parameterType="RboardVo">
+	<![CDATA[  
+		insert into rboard(no,
+								title,
+								content,
+								reg_date,
+								hit,
+								user_no,
+								order_no,
+								group_no
+								)
+		values(seq_rboard_no.nextval,
+				#{title},
+      			#{content},
+      			sysdate,
+      			0,
+      			#{user_no},
+      			order_no+1,
+      			#{group_no}
+		)	
+
+	]]>
+	</insert>
+
+	<select id="selectOne" resultType="RboardVo">
+	<![CDATA[
+			select no,
+				   title, 
+				   content,
+				   user_no from rboard 
+				   where no =#{no}
+			      
+	]]>
+	</select>
+
+	<update id="update" parameterType="RboardVo">
+	<![CDATA[
+			update rboard set title=#{title}, content=#{content} where no =#{no}
+			      
+	]]>
+	</update>
+
+
+	<delete id="delete" parameterType="RboardVo">
+	<![CDATA[  
+		DELETE FROM rboard WHERE NO=#{no}
+	
+	]]>
+	</delete>
+
+	<update id="updatehit" parameterType="int">
+	<![CDATA[
+			update rboard 
+			set hit = hit+1
+			where no =#{no}
+			      
+	]]>
+	</update>
+
+	<update id="update2" parameterType="RboardVo">
+	<![CDATA[
+			update rboard set order_no =order_no+1
+			where group_no= #{group_no}
+			and
+			order_no> #{order_no}
+			      
+	]]>
+	</update>
+
+
+</mapper>

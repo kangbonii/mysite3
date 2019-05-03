@@ -50,6 +50,19 @@
 	]]>
 
 	</select>
+	
+	<select id="selectByEmail" parameterType="string" resultType="com.javaex.vo.UserVo" >
+	<![CDATA[
+		 select no,
+				name,
+				email,
+				password
+		from users
+		where email = 	#{email}
+	
+	
+	]]>
+	</select>
 
 
 

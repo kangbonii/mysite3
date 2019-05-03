@@ -26,7 +26,14 @@ public class guestService {
 		return dao.delete(guestvo);
 	}
 	
-
 	
+	public GuestBookVo insertApi(GuestBookVo guestvo) {
+		
+		dao.insertselectno(guestvo);
+		return dao.selectOne(guestvo.getNo());
+		
+	}
+	
+
 	
 }

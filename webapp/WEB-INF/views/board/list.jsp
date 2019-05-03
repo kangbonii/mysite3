@@ -18,7 +18,7 @@
 				<div id="board">
 					<h2>게시판-리스트</h2>
 					
-					<form action="" method="post">
+					<form action="${pageContext.request.contextPath }/board/list" method="get">
 						<input type="text" id="kwd" name="kwd" value="">
 						<input type="submit" value="찾기">
 					</form>
@@ -33,10 +33,10 @@
 							<th>작성일</th>
 							<th>&nbsp;</th>
 						</tr>
-						<c:forEach items="${list}" var="vo" >	
+						<c:forEach items="${pMap.list}" var="vo" >	
 						<tr>
 							<td>${vo.no}</td>
-							<td><a href="${pageContext.request.contextPath}/board/read?no=${vo.no}">게시판제목</a></td>
+							<td><a href="${pageContext.request.contextPath}/board/read?no=${vo.no}&crtPage=${param.crtPage}&kwd=${param.kwd}">${vo.title} </a></td>
 							<td>${vo.name}</td>
 							<td>${vo.hit}</td>
 							<td>${vo.reg_date}</td>
@@ -52,19 +52,27 @@
 					</table>
 				
 					<div class="pager">
+					
 						<ul>
-							<li><a href="">◀</a></li>
-							<li><a href="">1</a></li>
-							<li><a href="">2</a></li>
-							<li class="selected">3</li>
-							<li><a href="">4</a></li>
-							<li><a href="">5</a></li>
-							<li><a href="">6</a></li>
-							<li><a href="">7</a></li>
-							<li><a href="">8</a></li>
-							<li><a href="">9</a></li>
-							<li><a href="">10</a></li>
-							<li><a href="">▶</a></li>
+							<c:if test="${pMap.prev eq true}"> 
+							<li><a href="${pageContext.request.contextPath}/board/list?crtPage=${pMap.startPageBtnNo-1}">◀</a></li>
+							</c:if>
+							
+							<c:forEach begin = "${pMap.startPageBtnNo}" end="${pMap.endPageBtnNo}" step="1" var="page" >
+								<c:choose>
+									<c:when test="${param.crtPage eq page}">
+										<li class="selected"><a href="${pageContext.request.contextPath}/board/list?crtPage=${page}">${page}</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="${pageContext.request.contextPath}/board/list?crtPage=${page}">${page }</a></li>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							
+							
+							<c:if test="${pMap.next eq true}"> 
+							<li><a href="${pageContext.request.contextPath}/board/list?crtPage=${pMap.endPageBtnNo+1}">▶</a></li>
+							</c:if>
 						</ul>
 					</div>			
 					

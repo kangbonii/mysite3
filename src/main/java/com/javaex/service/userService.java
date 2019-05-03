@@ -32,6 +32,16 @@ public class userService {
 	
 	}
 	
+//	이메일 체크
+	public boolean emailCheck(String email) {
+		UserVo vo = userDao.select(email);
+		//데이터가 없을때 true--->가입할 수 있음
+		if(vo == null) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 	
 }

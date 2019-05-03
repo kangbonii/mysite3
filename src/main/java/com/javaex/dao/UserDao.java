@@ -39,6 +39,9 @@ public class UserDao {
 	public UserVo getUser(int no) {
 		return sqlsession.selectOne("user.getuser",no);
 	}
+	public UserVo select(String email) {
+		return sqlsession.selectOne("user.selectByEmail", email);
+	}
 	
 //	public int insert(UserVo vo) {
 //		// 0. import java.sql.*;

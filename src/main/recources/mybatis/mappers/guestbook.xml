@@ -8,25 +8,38 @@
 			select no,
 				   name, 
 				   password, 
+				   content,
+				   reg_date
+			from guestbook1 
+			order by no desc
+	]]>
+	</select>
+	<select id="selectOne" resultType="GuestBookVo" parameterType="int">
+	<![CDATA[
+			select no,
+				   name, 
+				   password, 
 				  content,
 				  reg_date
 			    from guestbook1 
-
+			    where no = #{no}
 	]]>
 	</select>
-	
-	
-	<delete id="delete" parameterType="GuestBookVo" >
+
+	<delete id="delete" parameterType="GuestBookVo">
 	<![CDATA[  
 		DELETE FROM guestbook1 WHERE NO = #{no} 
 		and password = #{password}
 	
 	]]>
 	</delete>
-		
-		
-		
+
+
+
 	<insert id="insert" parameterType="GuestBookVo">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select seq_guestbook1_no.nextval from dual
+		</selectKey>
 	<![CDATA[  
 		insert into guestbook1(no,
 								name,
@@ -34,7 +47,7 @@
 								content,
 								reg_date
 								)
-		values(seq_guestbook1_no.nextval,
+		values( #{no },
 				#{name},
 				#{password},
       			#{content},
@@ -45,4 +58,7 @@
 		
 	]]>
 	</insert>
+
+
+
 </mapper>

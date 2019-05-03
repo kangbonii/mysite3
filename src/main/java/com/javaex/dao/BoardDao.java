@@ -1,13 +1,8 @@
 package com.javaex.dao;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +16,21 @@ public class BoardDao {
 	@Autowired
 	private SqlSession sqlsession;
 	
-	public List<BoardVo> getList(){
-		List<BoardVo> list = sqlsession.selectList("board.selectList");
+	public List<BoardVo> getList(int startRnum,int endRnum, String kwd){
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("startRnum",startRnum);
+		map.put("endRnum",endRnum);
+		map.put("kwd", kwd );
+		
+		List<BoardVo> list = sqlsession.selectList("board.selectList", map);
 		return list;
 	}
+	
+	//전체글갯수
+	public int totalCount(String kwd) {
+		return sqlsession.selectOne("board.totalCount",kwd);
+	}
+	
 	
 	public int insert(BoardVo vo) {
 		return sqlsession.insert("board.insert",vo);
@@ -40,6 +46,21 @@ public class BoardDao {
 
 	public int delete(int no) {
 		return sqlsession.delete("board.delete",no);
+	}
+
+	public void updateHit(int no) {
+		sqlsession.update("board.updatehit", no);	
+	}
+	
+	public void insert70() {
+		BoardVo vo = new BoardVo();
+		vo.setUser_no(2);
+		for(int i = 1; i <= 70; i++) {
+			vo.setTitle(i+"번째 제목");
+			vo.setContent(i+"안녕");
+			
+			sqlsession.insert("board.insert",vo);
+		}
 	}
 
 //	public List<BoardVo> getList(){

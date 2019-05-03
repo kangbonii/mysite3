@@ -39,7 +39,7 @@
 							</tr>
 						</table>
 						<div class="bottom">
-							<a href="${pageContext.request.contextPath}/guestbook/list">취소</a>
+							<a href="${pageContext.request.contextPath}/board/list">취소</a>
 							<input type="submit" value="등록">
 						</div>
 					</form>
